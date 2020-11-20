@@ -23,6 +23,9 @@ var OrbitControls = function ( object, domElement ) {
 	this.object = object;
 	this.domElement = domElement;
 
+	let _this = this;
+    this.panLimit= {maxX:1500,minX:1500,maxZ:1500,minZ:1500};
+
 	// Set to false to disable this control
 	this.enabled = true;
 
@@ -207,6 +210,19 @@ var OrbitControls = function ( object, domElement ) {
 
 			// restrict radius to be between desired limits
 			spherical.radius = Math.max( scope.minDistance, Math.min( scope.maxDistance, spherical.radius ) );
+
+            // move target to panned location
+            if(scope.target.x > _this.panLimit.maxX)
+                scope.target.x = _this.panLimit.maxX;
+
+            if(scope.target.x < -_this.panLimit.minX)
+                scope.target.x = -_this.panLimit.minX;
+
+            if(scope.target.z > _this.panLimit.maxZ)
+                scope.target.z = _this.panLimit.maxZ;
+
+            if(scope.target.z < -_this.panLimit.minZ)
+                scope.target.z = -_this.panLimit.minZ;
 
 			// move target to panned location
 
