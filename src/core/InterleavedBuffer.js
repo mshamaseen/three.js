@@ -66,7 +66,9 @@ Object.assign( InterleavedBuffer.prototype, {
 
 	},
 
-	set: function ( value, offset = 0 ) {
+	set: function ( value, offset ) {
+
+		if ( offset === undefined ) offset = 0;
 
 		this.array.set( value, offset );
 

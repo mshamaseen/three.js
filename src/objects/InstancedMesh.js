@@ -39,9 +39,15 @@ InstancedMesh.prototype = Object.assign( Object.create( Mesh.prototype ), {
 
 	},
 
-	getColorAt: function ( index, color ) {
+	setColorAt: function ( index, color ) {
 
-		color.fromArray( this.instanceColor.array, index * 3 );
+		if ( this.instanceColor === null ) {
+
+			this.instanceColor = new BufferAttribute( new Float32Array( this.count * 3 ), 3 );
+
+		}
+
+		color.toArray( this.instanceColor.array, index * 3 );
 
 	},
 
@@ -89,18 +95,6 @@ InstancedMesh.prototype = Object.assign( Object.create( Mesh.prototype ), {
 			_instanceIntersects.length = 0;
 
 		}
-
-	},
-
-	setColorAt: function ( index, color ) {
-
-		if ( this.instanceColor === null ) {
-
-			this.instanceColor = new BufferAttribute( new Float32Array( this.count * 3 ), 3 );
-
-		}
-
-		color.toArray( this.instanceColor.array, index * 3 );
 
 	},
 

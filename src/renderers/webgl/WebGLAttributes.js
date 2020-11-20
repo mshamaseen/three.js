@@ -28,23 +28,7 @@ function WebGLAttributes( gl, capabilities ) {
 
 		} else if ( array instanceof Uint16Array ) {
 
-			if ( attribute.isFloat16BufferAttribute ) {
-
-				if ( isWebGL2 ) {
-
-					type = gl.HALF_FLOAT;
-
-				} else {
-
-					console.warn( 'THREE.WebGLAttributes: Usage of Float16BufferAttribute requires WebGL2.' );
-
-				}
-
-			} else {
-
-				type = gl.UNSIGNED_SHORT;
-
-			}
+			type = gl.UNSIGNED_SHORT;
 
 		} else if ( array instanceof Int16Array ) {
 
@@ -140,7 +124,7 @@ function WebGLAttributes( gl, capabilities ) {
 
 		if ( attribute.isGLBufferAttribute ) {
 
-			const cached = buffers.get( attribute );
+			var cached = buffers.get( attribute );
 
 			if ( ! cached || cached.version < attribute.version ) {
 

@@ -53,7 +53,6 @@ export interface MaterialParameters {
 	stencilFail?: StencilOp;
 	stencilZFail?: StencilOp;
 	stencilZPass?: StencilOp;
-	userData?: any;
 }
 
 /**

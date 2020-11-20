@@ -65,7 +65,9 @@ Object.assign( Curve.prototype, {
 
 	// Get sequence of points using getPoint( t )
 
-	getPoints: function ( divisions = 5 ) {
+	getPoints: function ( divisions ) {
+
+		if ( divisions === undefined ) divisions = 5;
 
 		const points = [];
 
@@ -81,7 +83,9 @@ Object.assign( Curve.prototype, {
 
 	// Get sequence of points using getPointAt( u )
 
-	getSpacedPoints: function ( divisions = 5 ) {
+	getSpacedPoints: function ( divisions ) {
+
+		if ( divisions === undefined ) divisions = 5;
 
 		const points = [];
 

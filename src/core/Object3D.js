@@ -251,7 +251,7 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 	worldToLocal: function ( vector ) {
 
-		return vector.applyMatrix4( _m1.copy( this.matrixWorld ).invert() );
+		return vector.applyMatrix4( _m1.getInverse( this.matrixWorld ) );
 
 	},
 
@@ -291,7 +291,7 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 			_m1.extractRotation( parent.matrixWorld );
 			_q1.setFromRotationMatrix( _m1 );
-			this.quaternion.premultiply( _q1.invert() );
+			this.quaternion.premultiply( _q1.inverse() );
 
 		}
 
@@ -395,7 +395,7 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 		this.updateWorldMatrix( true, false );
 
-		_m1.copy( this.matrixWorld ).invert();
+		_m1.getInverse( this.matrixWorld );
 
 		if ( object.parent !== null ) {
 
@@ -658,8 +658,7 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 				materials: {},
 				textures: {},
 				images: {},
-				shapes: {},
-				skeletons: {}
+				shapes: {}
 			};
 
 			output.metadata = {
@@ -744,21 +743,6 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 		}
 
-		if ( this.isSkinnedMesh ) {
-
-			object.bindMode = this.bindMode;
-			object.bindMatrix = this.bindMatrix.toArray();
-
-			if ( this.skeleton !== undefined ) {
-
-				serialize( meta.skeletons, this.skeleton );
-
-				object.skeleton = this.skeleton.uuid;
-
-			}
-
-		}
-
 		if ( this.material !== undefined ) {
 
 			if ( Array.isArray( this.material ) ) {
@@ -802,14 +786,12 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 			const textures = extractFromCache( meta.textures );
 			const images = extractFromCache( meta.images );
 			const shapes = extractFromCache( meta.shapes );
-			const skeletons = extractFromCache( meta.skeletons );
 
 			if ( geometries.length > 0 ) output.geometries = geometries;
 			if ( materials.length > 0 ) output.materials = materials;
 			if ( textures.length > 0 ) output.textures = textures;
 			if ( images.length > 0 ) output.images = images;
 			if ( shapes.length > 0 ) output.shapes = shapes;
-			if ( skeletons.length > 0 ) output.skeletons = skeletons;
 
 		}
 
@@ -843,7 +825,9 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 	},
 
-	copy: function ( source, recursive = true ) {
+	copy: function ( source, recursive ) {
+
+		if ( recursive === undefined ) recursive = true;
 
 		this.name = source.name;
 

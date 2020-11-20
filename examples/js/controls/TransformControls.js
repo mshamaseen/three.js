@@ -221,8 +221,8 @@ THREE.TransformControls = function ( camera, domElement ) {
 
 			this.object.matrixWorld.decompose( worldPosition, worldQuaternion, worldScale );
 
-			parentQuaternionInv.copy( parentQuaternion ).invert();
-			worldQuaternionInv.copy( worldQuaternion ).invert();
+			parentQuaternionInv.copy( parentQuaternion ).inverse();
+			worldQuaternionInv.copy( worldQuaternion ).inverse();
 
 		}
 
@@ -371,7 +371,7 @@ THREE.TransformControls = function ( camera, domElement ) {
 
 				if ( space === 'local' ) {
 
-					object.position.applyQuaternion( _tempQuaternion.copy( quaternionStart ).invert() );
+					object.position.applyQuaternion( _tempQuaternion.copy( quaternionStart ).inverse() );
 
 					if ( axis.search( 'X' ) !== - 1 ) {
 
@@ -1277,7 +1277,7 @@ THREE.TransformControlsGizmo = function () {
 					handle.position.copy( this.worldPositionStart );
 					handle.quaternion.copy( this.worldQuaternionStart );
 					tempVector.set( 1e-10, 1e-10, 1e-10 ).add( this.worldPositionStart ).sub( this.worldPosition ).multiplyScalar( - 1 );
-					tempVector.applyQuaternion( this.worldQuaternionStart.clone().invert() );
+					tempVector.applyQuaternion( this.worldQuaternionStart.clone().inverse() );
 					handle.scale.copy( tempVector );
 					handle.visible = this.dragging;
 
@@ -1460,7 +1460,7 @@ THREE.TransformControlsGizmo = function () {
 				// Align handles to current local or world rotation
 
 				tempQuaternion2.copy( quaternion );
-				alignVector.copy( this.eye ).applyQuaternion( tempQuaternion.copy( quaternion ).invert() );
+				alignVector.copy( this.eye ).applyQuaternion( tempQuaternion.copy( quaternion ).inverse() );
 
 				if ( handle.name.search( "E" ) !== - 1 ) {
 

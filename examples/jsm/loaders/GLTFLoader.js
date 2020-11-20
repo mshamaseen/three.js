@@ -3256,7 +3256,6 @@ var GLTFLoader = ( function () {
 
 		var parser = this;
 		var json = this.json;
-		var extensions = this.extensions;
 
 		var meshDef = json.meshes[ meshIndex ];
 		var primitives = meshDef.primitives;
@@ -3352,8 +3351,6 @@ var GLTFLoader = ( function () {
 				mesh.name = parser.createUniqueName( meshDef.name || ( 'mesh_' + meshIndex ) );
 
 				assignExtrasToUserData( mesh, meshDef );
-
-				if ( primitive.extensions ) addUnknownExtensionsToUserData( extensions, mesh, primitive );
 
 				parser.assignFinalMaterial( mesh );
 

@@ -169,7 +169,7 @@
 		const cachedAttributes = currentState.attributes;
 		const geometryAttributes = geometry.attributes;
 
-		let attributesNum = 0;
+		if ( Object.keys( cachedAttributes ).length !== Object.keys( geometryAttributes ).length ) return true;
 
 		for ( const key in geometryAttributes ) {
 
@@ -182,11 +182,7 @@
 
 			if ( cachedAttribute.data !== geometryAttribute.data ) return true;
 
-			attributesNum ++;
-
 		}
-
-		if ( currentState.attributesNum !== attributesNum ) return true;
 
 		if ( currentState.index !== index ) return true;
 
@@ -198,7 +194,6 @@
 
 		const cache = {};
 		const attributes = geometry.attributes;
-		let attributesNum = 0;
 
 		for ( const key in attributes ) {
 
@@ -215,12 +210,9 @@
 
 			cache[ key ] = data;
 
-			attributesNum ++;
-
 		}
 
 		currentState.attributes = cache;
-		currentState.attributesNum = attributesNum;
 
 		currentState.index = index;
 

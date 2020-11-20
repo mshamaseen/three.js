@@ -442,9 +442,6 @@ Rhino3dmLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 				var points = new Points( geometry, material );
 				points.userData[ 'attributes' ] = attributes;
 				points.userData[ 'objectType' ] = obj.objectType;
-				if( attributes.name ) {
-					points.name = attributes.name;
-				}
 				return points;
 
 			case 'Mesh':
@@ -471,9 +468,6 @@ Rhino3dmLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 				mesh.receiveShadow = attributes.receivesShadows;
 				mesh.userData[ 'attributes' ] = attributes;
 				mesh.userData[ 'objectType' ] = obj.objectType;
-				if( attributes.name ) {
-					mesh.name = attributes.name;
-				}
 
 				return mesh;
 
@@ -494,9 +488,6 @@ Rhino3dmLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 
 				brepObject.userData[ 'attributes' ] = attributes;
 				brepObject.userData[ 'objectType' ] = obj.objectType;
-				if( attributes.name ) {
-					brepObject.name = attributes.name;
-				}
 
 				return brepObject;
 
@@ -513,9 +504,6 @@ Rhino3dmLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 				var lines = new Line( geometry, material );
 				lines.userData[ 'attributes' ] = attributes;
 				lines.userData[ 'objectType' ] = obj.objectType;
-				if( attributes.name ) {
-					lines.name = attributes.name;
-				}
 
 				return lines;
 
@@ -558,9 +546,6 @@ Rhino3dmLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 
 				sprite.userData[ 'attributes' ] = attributes;
 				sprite.userData[ 'objectType' ] = obj.objectType;
-				if( attributes.name ) {
-					sprite.name = attributes.name;
-				}
 
 				return sprite;
 
@@ -1318,7 +1303,7 @@ Rhino3dmLoader.Rhino3dmWorker = function () {
 		if ( curve instanceof rhino.ArcCurve ) {
 
 			pointCount = Math.floor( curve.angleDegrees / 5 );
-			pointCount = pointCount < 2 ? 2 : pointCount;
+			pointCount = pointCount < 1 ? 2 : pointCount;
 			// alternative to this hardcoded version: https://stackoverflow.com/a/18499923/2179399
 
 		}

@@ -325,8 +325,7 @@ Object.assign( OBB.prototype, {
 
 		// transform ray to the local space of the OBB
 
-		inverse.copy( matrix ).invert();
-		localRay.copy( ray ).applyMatrix4( inverse );
+		localRay.copy( ray ).applyMatrix4( inverse.getInverse( matrix ) );
 
 		// perform ray <-> AABB intersection test
 

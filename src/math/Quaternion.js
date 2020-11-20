@@ -410,7 +410,7 @@ class Quaternion {
 
 	}
 
-	invert() {
+	inverse() {
 
 		// quaternion is assumed to have unit length
 

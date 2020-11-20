@@ -105,9 +105,13 @@
 
 				geometry.center();
 
-				const tessellateModifier = new TessellateModifier( 8, 6 );
+				const tessellateModifier = new TessellateModifier( 8 );
 
-				geometry = tessellateModifier.modify( geometry );
+				for ( let i = 0; i < 6; i ++ ) {
+
+					tessellateModifier.modify( geometry );
+
+				}
 
 				//
 

@@ -7,8 +7,6 @@ assignees: ''
 
 ---
 
-<!-- Ignoring this template may result in your bug report getting deleted -->
-
 **Describe the bug**
 
 A clear and concise description of what the bug is. Before submitting, please remove unnecessary sections.

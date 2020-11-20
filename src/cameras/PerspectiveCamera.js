@@ -205,7 +205,7 @@ PerspectiveCamera.prototype = Object.assign( Object.create( Camera.prototype ), 
 
 		this.projectionMatrix.makePerspective( left, left + width, top, top - height, near, this.far );
 
-		this.projectionMatrixInverse.copy( this.projectionMatrix ).invert();
+		this.projectionMatrixInverse.getInverse( this.projectionMatrix );
 
 	},
 

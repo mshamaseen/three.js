@@ -4,8 +4,11 @@
  * - DFD: https://www.khronos.org/registry/DataFormat/specs/1.3/dataformat.1.3.html#basicdescriptor
  *
  * To do:
+ * - [ ] Cross-platform testing
+ * - [ ] Specify JS/WASM transcoder path
  * - [ ] High-quality demo
  * - [ ] Documentation
+ * - [ ] TypeScript definitions
  * - [ ] (Optional) Include BC5
  * - [ ] (Optional) Include EAC RG on mobile (WEBGL_compressed_texture_etc)
  * - [ ] (Optional) Include two-texture output mode (see: clearcoat + clearcoatRoughness)
@@ -133,24 +136,20 @@ class KTX2Loader extends CompressedTextureLoader {
 
 		} );
 
-		// parse() will call initModule() again, but starting the process early
-		// should allow the WASM to load in parallel with the texture.
 		this.initModule();
 
-		Promise.all( [ bufferPending, this.basisModulePending ] )
-			.then( function ( [ buffer ] ) {
+		Promise.all( [ bufferPending, this.basisModulePending ] ).then( function ( [ buffer ] ) {
 
-				scope.parse( buffer, function ( _texture ) {
+			scope.parse( buffer, function ( _texture ) {
 
-					texture.copy( _texture );
-					texture.needsUpdate = true;
+				texture.copy( _texture );
+				texture.needsUpdate = true;
 
-					if ( onLoad ) onLoad( texture );
+				if ( onLoad ) onLoad( texture );
 
-				}, onError );
+			}, onError );
 
-			} )
-			.catch( onError );
+		} );
 
 		return texture;
 
@@ -158,50 +157,40 @@ class KTX2Loader extends CompressedTextureLoader {
 
 	parse( buffer, onLoad, onError ) {
 
-		var scope = this;
+		var BasisLzEtc1sImageTranscoder = this.basisModule.BasisLzEtc1sImageTranscoder;
+		var UastcImageTranscoder = this.basisModule.UastcImageTranscoder;
+		var TextureFormat = this.basisModule.TextureFormat;
 
-		// load() may have already called initModule(), but call it again here
-		// in case the user called parse() directly. Method is idempotent.
-		this.initModule();
+		var ktx = new KTX2Container( this.basisModule, buffer );
 
-		this.basisModulePending.then( function () {
+		// TODO(donmccurdy): Should test if texture is transcodable before attempting
+		// any transcoding. If supercompressionScheme is KTX_SS_BASIS_LZ and dfd
+		// colorModel is ETC1S (163) or if dfd colorModel is UASTCF (166)
+		// then texture must be transcoded.
+		var transcoder = ktx.getTexFormat() === TextureFormat.UASTC4x4
+			? new UastcImageTranscoder()
+			: new BasisLzEtc1sImageTranscoder();
 
-			var BasisLzEtc1sImageTranscoder = scope.basisModule.BasisLzEtc1sImageTranscoder;
-			var UastcImageTranscoder = scope.basisModule.UastcImageTranscoder;
-			var TextureFormat = scope.basisModule.TextureFormat;
+		ktx.initMipmaps( transcoder, this.transcoderConfig )
+			.then( function () {
 
-			var ktx = new KTX2Container( scope.basisModule, buffer );
+				var texture = new CompressedTexture(
+					ktx.mipmaps,
+					ktx.getWidth(),
+					ktx.getHeight(),
+					ktx.transcodedFormat,
+					UnsignedByteType
+				);
 
-			// TODO(donmccurdy): Should test if texture is transcodable before attempting
-			// any transcoding. If supercompressionScheme is KTX_SS_BASIS_LZ and dfd
-			// colorModel is ETC1S (163) or if dfd colorModel is UASTCF (166)
-			// then texture must be transcoded.
-			var transcoder = ktx.getTexFormat() === TextureFormat.UASTC4x4
-				? new UastcImageTranscoder()
-				: new BasisLzEtc1sImageTranscoder();
+				texture.encoding = ktx.getEncoding();
+				texture.premultiplyAlpha = ktx.getPremultiplyAlpha();
+				texture.minFilter = ktx.mipmaps.length === 1 ? LinearFilter : LinearMipmapLinearFilter;
+				texture.magFilter = LinearFilter;
 
-			ktx.initMipmaps( transcoder, scope.transcoderConfig )
-				.then( function () {
+				onLoad( texture );
 
-					var texture = new CompressedTexture(
-						ktx.mipmaps,
-						ktx.getWidth(),
-						ktx.getHeight(),
-						ktx.transcodedFormat,
-						UnsignedByteType
-					);
-
-					texture.encoding = ktx.getEncoding();
-					texture.premultiplyAlpha = ktx.getPremultiplyAlpha();
-					texture.minFilter = ktx.mipmaps.length === 1 ? LinearFilter : LinearMipmapLinearFilter;
-					texture.magFilter = LinearFilter;
-
-					onLoad( texture );
-
-				} )
-				.catch( onError );
-
-		} );
+			} )
+			.catch( onError );
 
 		return this;
 

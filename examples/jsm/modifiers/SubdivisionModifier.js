@@ -1,5 +1,4 @@
 import {
-	BufferGeometry,
 	Face3,
 	Geometry,
 	Vector2,
@@ -28,9 +27,7 @@ var SubdivisionModifier = function ( subdivisions ) {
 // Applies the "modify" pattern
 SubdivisionModifier.prototype.modify = function ( geometry ) {
 
-	var isBufferGeometry = geometry.isBufferGeometry;
-
-	if ( isBufferGeometry ) {
+	if ( geometry.isBufferGeometry ) {
 
 		geometry = new Geometry().fromBufferGeometry( geometry );
 
@@ -40,7 +37,7 @@ SubdivisionModifier.prototype.modify = function ( geometry ) {
 
 	}
 
-	geometry.mergeVertices( 6 );
+	geometry.mergeVertices();
 
 	var repeats = this.subdivisions;
 
@@ -53,15 +50,7 @@ SubdivisionModifier.prototype.modify = function ( geometry ) {
 	geometry.computeFaceNormals();
 	geometry.computeVertexNormals();
 
-	if ( isBufferGeometry ) {
-
-		return new BufferGeometry().fromGeometry( geometry );
-
-	} else {
-
-		return geometry;
-
-	}
+	return geometry;
 
 };
 

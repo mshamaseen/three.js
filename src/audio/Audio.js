@@ -87,7 +87,9 @@ class Audio extends Object3D {
 
 	}
 
-	play( delay = 0 ) {
+	play( delay ) {
+
+		if ( delay === undefined ) delay = 0;
 
 		if ( this.isPlaying === true ) {
 

@@ -82,7 +82,7 @@ export class Quaternion {
 	/**
 	 * Inverts this quaternion.
 	 */
-	invert(): Quaternion;
+	inverse(): Quaternion;
 
 	conjugate(): Quaternion;
 	dot( v: Quaternion ): number;
@@ -179,10 +179,5 @@ export class Quaternion {
 	 * @deprecated Use {@link Vector#applyQuaternion vector.applyQuaternion( quaternion )} instead.
 	 */
 	multiplyVector3( v: any ): any;
-
-	/**
-	 * @deprecated Use {@link Quaternion#invert .invert()} instead.
-	 */
-	inverse(): Quaternion;
 
 }

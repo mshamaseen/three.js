@@ -40,8 +40,7 @@ var DecalGeometry = function ( mesh, position, orientation, size ) {
 	projectorMatrix.makeRotationFromEuler( orientation );
 	projectorMatrix.setPosition( position );
 
-	var projectorMatrixInverse = new Matrix4();
-	projectorMatrixInverse.copy( projectorMatrix ).invert();
+	var projectorMatrixInverse = new Matrix4().getInverse( projectorMatrix );
 
 	// generate buffers
 

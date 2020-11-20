@@ -55,7 +55,7 @@ Camera.prototype = Object.assign( Object.create( Object3D.prototype ), {
 
 		Object3D.prototype.updateMatrixWorld.call( this, force );
 
-		this.matrixWorldInverse.copy( this.matrixWorld ).invert();
+		this.matrixWorldInverse.getInverse( this.matrixWorld );
 
 	},
 
@@ -63,7 +63,7 @@ Camera.prototype = Object.assign( Object.create( Object3D.prototype ), {
 
 		Object3D.prototype.updateWorldMatrix.call( this, updateParents, updateChildren );
 
-		this.matrixWorldInverse.copy( this.matrixWorld ).invert();
+		this.matrixWorldInverse.getInverse( this.matrixWorld );
 
 	},
 

@@ -112,7 +112,9 @@ export function MeshFaceMaterial( materials ) {
 
 }
 
-export function MultiMaterial( materials = [] ) {
+export function MultiMaterial( materials ) {
+
+	if ( materials === undefined ) materials = [];
 
 	console.warn( 'THREE.MultiMaterial has been removed. Use an Array instead.' );
 	materials.isMultiMaterial = true;
@@ -608,12 +610,6 @@ Object.assign( Matrix3.prototype, {
 
 		console.error( 'THREE.Matrix3: .applyToVector3Array() has been removed.' );
 
-	},
-	getInverse: function ( matrix ) {
-
-		console.warn( 'THREE.Matrix3: .getInverse() has been removed. Use matrixInv.copy( matrix ).invert(); instead.' );
-		return this.copy( matrix ).invert();
-
 	}
 
 } );
@@ -719,12 +715,6 @@ Object.assign( Matrix4.prototype, {
 		console.warn( 'THREE.Matrix4: .makeFrustum() has been removed. Use .makePerspective( left, right, top, bottom, near, far ) instead.' );
 		return this.makePerspective( left, right, top, bottom, near, far );
 
-	},
-	getInverse: function ( matrix ) {
-
-		console.warn( 'THREE.Matrix4: .getInverse() has been removed. Use matrixInv.copy( matrix ).invert(); instead.' );
-		return this.copy( matrix ).invert();
-
 	}
 
 } );
@@ -736,22 +726,12 @@ Plane.prototype.isIntersectionLine = function ( line ) {
 
 };
 
-Object.assign( Quaternion.prototype, {
+Quaternion.prototype.multiplyVector3 = function ( vector ) {
 
-	multiplyVector3: function ( vector ) {
+	console.warn( 'THREE.Quaternion: .multiplyVector3() has been removed. Use is now vector.applyQuaternion( quaternion ) instead.' );
+	return vector.applyQuaternion( this );
 
-		console.warn( 'THREE.Quaternion: .multiplyVector3() has been removed. Use is now vector.applyQuaternion( quaternion ) instead.' );
-		return vector.applyQuaternion( this );
-
-	},
-	inverse: function ( ) {
-
-		console.warn( 'THREE.Quaternion: .inverse() has been renamed to invert().' );
-		return this.invert();
-
-	}
-
-} );
+};
 
 Object.assign( Ray.prototype, {
 
