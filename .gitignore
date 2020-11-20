@@ -1,6 +1,7 @@
 # First, ignore everything
 *
 !.gitignore
+!merge-with-upstream.md
 !build/
 !build/*
 !/examples
